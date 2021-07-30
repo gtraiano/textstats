@@ -1,0 +1,64 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+table.results-table {
+    font-family: 'Roboto', sans-serif;
+    margin: auto;
+    width: 100%;
+    border-spacing: 0;
+    text-align: center;
+    font-size: 100%;
+}
+
+/* sticky table header */
+table.results-table.sticky-head thead {
+    position: sticky;
+    top: 0;
+}
+
+/* table head cells */
+table.results-table thead th {
+    font-size:larger;
+    font-weight: bold;
+    margin-right: 0;
+    border: none;
+    color: white;
+    background-color: rgb(4, 170, 109);
+    padding-top: 10px;
+    padding-bottom: 10px;
+    border-spacing: 0px;
+}
+
+/* seconday header (below main header) */
+table.results-table thead tr.secondary-head th {
+    background-color: dimgray;
+    font-size: inherit;
+    padding: 1%;
+    /*position: sticky;*/
+    /*top: 2.7rem;*/
+}
+
+/* row as secondary header */
+table.results-table tbody tr.secondary-head th {
+    padding: 1%;
+    background-color: dimgray;
+}
+
+/* all table cells */
+table.results-table tr td {
+    padding: 1%;
+}
+
+/*table.results-table tr td:first-child {
+    font-weight: bold;
+}*/
+
+/* alternating row colour in body */
+table.results-table tbody tr:nth-child(even) {
+    background-color: lightgray;
+    border: none;
+}
+
+table.results-table tbody tr:hover {
+    background-color: lightblue;
+}
+

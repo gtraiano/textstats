@@ -1,0 +1,75 @@
+* {
+  box-sizing: border-box;
+}
+
+.App {
+  text-align: center;
+  height: 100%;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+}
+
+.textarea-container {
+  width: 100%;
+  height: 50%;
+}
+
+#textarea {
+  width: 50%;
+  height: 25%;
+  margin-top: calc(50%/8);
+  display: inline-block;
+  resize: none;
+  font-size: medium;
+  font-family: inherit;
+}
+
+.results {
+  width: 100%;
+  height: 50%;
+  margin-top: 1%;
+}
+
+button {
+  font-size: medium;
+  background-color: lightseagreen;
+  color: white;
+  padding: 10px;
+  border: none transparent;
+  border-radius: 4px;
+}
+
+button[type=submit] {
+  margin-top: 1%;
+  cursor: pointer;
+}
+
+button[type=submit]:hover {
+  background-color:cornflowerblue;
+}
+
+button[type=navigation] {
+  background-color: black;
+  border: 1px solid transparent;
+  padding: 10px;
+  font-size: 16px;
+  margin-right: 1px;
+}
+
+button[type=navigation]:last-child {
+  margin-right: 0px;
+}
+
+button[type=navigation]:hover {
+  background-color: black;
+  color: white;
+  cursor: pointer;
+}
+
+button[type=navigation].active {
+  background-color: gray;
+}
+button[type=navigation].active-all {
+  background-color: pink;
+}
