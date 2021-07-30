@@ -1,4 +1,5 @@
 require('dotenv').config()
+const path = require('path')
 const express = require('express')
 const cors = require('cors')
 const app = express()
@@ -8,6 +9,9 @@ const { letterFrequencies, wordFrequencies, textStats, charNgramFrequencies, wor
 
 app.use(cors())
 app.use(express.json())
+
+//app.use('/', express.static('public/build'))
+//app.use('/app', express.static(path.join(__dirname, 'public/build')))
 
 app.get('/', (req, res) => {
     res.send('welcome to text analysis tool')
@@ -52,6 +56,11 @@ app.post('/wordngramfreqs', (req, res) => {
     if(!Object.keys(req.body) || !req.body.text)
         return res.status(400)
     res.json(wordNgrams(req.body.text, req.body.n, req.body.m))
+})
+
+app.use(express.static(path.join(__dirname, 'public/build')))
+app.get('/app', (req, res) => {
+    res.sendFile(path.join(__dirname, 'public/build/index.html'))
 })
 
 app.listen(PORT, function () {
