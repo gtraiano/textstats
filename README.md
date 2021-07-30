@@ -1,4 +1,5 @@
 # textstats
+A mini project to learn REST APIs and consume them via a React frontend.
 ## backend
 Runs on Node.Js and Express.
 
