@@ -7,7 +7,7 @@ Performs simple statistical text analysis.
 
 `npm start` to run, or `npm run dev` to run with nodemon for development.
 
-Server listens on port 3001 by default, value can be changed by editing `.env`.
+Server listens on port 3001 by default, value can be changed by setting environment variable `PORT` in `.env`.
 
 ## frontend
 Written in React.
@@ -16,4 +16,4 @@ Written in React.
 
 `npm build` to perform a build.
 
-Environment variable `REACT_APP_BACKEND_URL` must be set to backend url in `.env`.
+Environment variable `REACT_APP_BACKEND_URL` must be set to the backend's url address in `.env`.
