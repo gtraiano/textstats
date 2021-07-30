@@ -135,7 +135,7 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
         <div>
             <div style={{ position: 'absolute', top: '0.25%', width: 'max-content', right: '2%' }}>
                 <select
-                    defaultValue="0"
+                    value={selectedIndex}
                     style={{ padding: '5px', fontSize: 'medium', backgroundColor: 'transparent', border: '1px solid black', borderRadius: '4px' }}
                     onChange={ e => setSelectedIndex(e.target.value)}
                 >
