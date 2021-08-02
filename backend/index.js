@@ -18,8 +18,8 @@ app.get('/routes', (req, res) => {
     res.json(apiRoutes)
 })
 
-app.use(express.static(path.join(__dirname, FRONTEND_BUILD_PATH)))
-app.get(FRONTEND_ENDPOINT, (req, res) => {
+FRONTEND_BUILD_PATH && FRONTEND_ENDPOINT && app.use(express.static(path.join(__dirname, FRONTEND_BUILD_PATH)))
+FRONTEND_BUILD_PATH && FRONTEND_ENDPOINT && app.get(FRONTEND_ENDPOINT, (req, res) => {
     res.sendFile(path.join(__dirname, `${FRONTEND_BUILD_PATH}/index.html`))
 })
 
