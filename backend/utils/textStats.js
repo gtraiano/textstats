@@ -1,6 +1,8 @@
 // counts words in text
 const wordCount = (text) => {
-    const word = new RegExp(/\w+[-']?\w+/gi)
+    if(text === null || text === undefined) return undefined
+    //const word = new RegExp(/\w+[-']?\w+/gi)
+    const word = new RegExp(/['"]\w+['"]|\w+'\w+|(\w+(?:[-]?\w+){0,3})/g) // quoted word|word with apostrophe|word[hyphenated]
     let count = 0
     const matches = text.matchAll(word)
     for(_ of matches) {
@@ -11,6 +13,7 @@ const wordCount = (text) => {
 
 //counts whitespace characters in text
 const whitespaceCount = text => {
+    if(text === null || text === undefined) return undefined
     const re = new RegExp(/\s/g)
     const matches = text.matchAll(re)
     let count = 0
@@ -22,6 +25,7 @@ const whitespaceCount = text => {
 
 //counts alphabetic characters in text
 const alphabeticCount = (text) => {
+    if(text === null || text === undefined) return undefined
     const re = new RegExp(/[a-zA-Z]/g)
     const matches = text.matchAll(re)
     let upperCount = lowerCount = 0
@@ -38,6 +42,7 @@ const alphabeticCount = (text) => {
 
 //counts digit characters in text
 const digitCount = text => {
+    if(text === null || text === undefined) return undefined
     const re = new RegExp(/\d/g)
     const matches = text.matchAll(re)
     let count = 0
@@ -49,6 +54,7 @@ const digitCount = text => {
 
 // punctuation characters stats
 const punctuationCount = text => {
+    if(text === null || text === undefined) return undefined
     const punct = new Map()
     const re = new RegExp(/\.|\?|\!|\,|\:|\;|\–|\-|\[|\]|\{|\}|\(|\)|\'|\"|\.{3}/g)
     const matches = text.matchAll(re)
@@ -65,6 +71,7 @@ const punctuationCount = text => {
 
 // count sentences of text
 const sentencesCount = text => {
+    if(text === null || text === undefined) return undefined
 // https://stackoverflow.com/questions/5553410/regular-expression-match-a-sentence
     const re = new RegExp(/[^.!?\s][^.!?]*(?:[.!?](?!['"]?\s|$)[^.!?]*)*[.!?]?['"]?(?=\s|$)/, 'gi')
     const matches = text.matchAll(re)
@@ -77,6 +84,7 @@ const sentencesCount = text => {
 
 // count lines of text
 const linesCount = text => {
+    if(text === null || text === undefined) return undefined
     const matches = text.matchAll(/\n/g)
     let count = 0
     for(_ of matches) {
@@ -280,6 +288,12 @@ const textStats = text => {
 
 module.exports = {
     wordCount,
+    whitespaceCount,
+    alphabeticCount,
+    digitCount,
+    punctuationCount,
+    sentencesCount,
+    linesCount,
     charNgramFrequencies,
     letterFrequencies,
     wordFrequencies,
