@@ -32,6 +32,7 @@ const BarChart = ({ dataset, options, style, className }) => {
         newOptions.plugins.legend.title.text = options.chartTitle
         newOptions.scales.x.ticks = {
             ...newOptions.scales.x.ticks,
+            ...options.verticalXAxisLabels && options.indexAxis && { indexAxis: options.indexAxis },
             ...options.verticalXAxisLabels && options.indexAxis !== 'y' && {
                 ...{
                     autoSkip: false,
