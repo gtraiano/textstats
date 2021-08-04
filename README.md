@@ -5,7 +5,7 @@ Live demo at https://textstats.herokuapp.com/app
 ## backend
 Runs on Node.Js and uses Express.
 
-Prvides a REST API the performs simple text statistical analysis.
+Prvides a REST API that performs simple text statistical analysis.
 
 `npm start` to run, or `npm run dev` to run with nodemon for development.
 
