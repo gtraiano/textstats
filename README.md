@@ -17,14 +17,14 @@ Server listens on port 3001 by default, value can be changed by setting environm
 | `/letterfreqs` | POST | `text` | character count by category (alphabetic, digits, punctuation) |
 | `/wordfreqs` | POST | `text` | word count, word frequency, shortest, longest and average word length |
 | `/textstats` | POST | `text` | text length (incl. and excl. whitespace), line, words and sentences count |
-| `/charngramfreqs` | POST | `text, n, m` | n-grams count (total and unique) and frequency table for given `n, m` |
-| `/wordngramfreqs` | POST | `text, n, m` | n-grams count for words |
+| `/charngramfreqs` | POST | `text, n, m` | n-grams count (total and unique) and frequency table for given `[n, m]` |
+| `/wordngramfreqs` | POST | `text, n, m` | word n-grams count (total and unique) and frequency table for given `[n, m]` |
 
 ### Server paths
 | Path | Method | Body Parameters | Function |
 | :--: | :----: | :-------------: | :------: |
-| `/` | GET | | welcome text message |
-| `/routes` | GET | | all API endpoints |
+| `/` | GET | - | welcome text message |
+| `/routes` | GET | - | all API endpoints |
 
 ### Environment variables
 The following variables can be set in `.env`
@@ -46,7 +46,7 @@ Written in React.
 
 `npm run build` to perform a build.
 
-###Environment variables
+### Environment variables
 The following variables must be set in `.env`
 
 `REACT_APP_BACKEND_URL` is the backend's url address
