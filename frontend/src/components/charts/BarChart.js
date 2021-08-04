@@ -63,6 +63,8 @@ const BarChart = ({ dataset, options, style, className }) => {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [dataset, options, canvasRef])
 
+    
+
     if(!isDatasetOk(dataset)) {
         return null
     }

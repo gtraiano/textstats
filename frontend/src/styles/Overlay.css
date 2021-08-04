@@ -20,11 +20,11 @@
     padding: 0;
 }
 
-/*.link-button-container > button {
+.link-button-container > button {
     opacity: 0;
     transition: opacity .15s ease-in;
 }
 .link-button-container > button:hover {
     opacity: 1;
-    transition: opacity .25s ease-in;
-}*/
+    transition: opacity .35s ease-out;
+}
