@@ -99,7 +99,12 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                     title: 'Word frequency absolute vs. relative',
                     chart: (
                         <RadarChart
-                            style={chartStyle}
+                            //style={chartStyle}
+                            style={
+                                Object.keys(wordStats.wordFreqs).length <= 35
+                                ? chartStyle
+                                : { ...chartStyle, height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`, position: 'relative', transform: `translateY(${20+Object.keys(wordStats.wordFreqs).length/35}%)`}
+                            }
                             dataset={
                                 {
                                 labels: Object.keys(wordStats?.wordFreqs) || [],
