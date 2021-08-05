@@ -3,7 +3,7 @@ const barChart = {
     data: {},
     options : {
         maintainAspectRatio: false,
-        aspectRatio: 2,
+        //aspectRatio: 2,
         responsive: true,
         scales: {
             y: {
@@ -59,7 +59,7 @@ const radarChart = {
     type: "radar",
     data: {},
     options: {
-        aspectRatio: 1,
+        //aspectRatio: 1,
         maintainAspectRatio: false,
         responsive: true,
         plugins: {
