@@ -96,7 +96,8 @@ const linesCount = text => {
 // word frequency in text
 const wordFrequencies = text => {
     const words = new Map()
-    const re = new RegExp(/\w+[-']?\w+/g)
+    //const re = new RegExp(/\w+[-']?\w+/g)
+    const re = new RegExp(/['"]\w+['"]|\w+'\w+|(\w+(?:[-]?\w+){0,3})/g) // quoted word|word with apostrophe|word[hyphenated]
     const matches = text.matchAll(re)
     const wordsTotal = wordCount(text)
     for(const w of matches) {
@@ -125,6 +126,7 @@ const wordFrequencies = text => {
                 .sort((a, b) => { // sort equal frequencies by key ascending
                     if(b[1].absolute === a[1].absolute) {
                         return b[0] < a[0] ? 1 : -1
+                        //return b[0].localeCompare(a[0])
                     }
                 })
                 .reduce(
@@ -135,7 +137,7 @@ const wordFrequencies = text => {
         wordCount: wordsTotal,
         shortestLength: Math.min(...[...words.entries()].map(w => w[0].length)),
         longestLength: Math.max(...[...words.entries()].map(w => w[0].length)),
-        averageLength: [...words.entries()].map(w => w[0].length).reduce((acc, cur) => acc + cur, 0) / wordCount(text)                
+        averageLength: [...words.entries()].map(w => w[0].length*w[1].absolute).reduce((acc, cur) => acc + cur, 0) / wordsTotal
     }
 }
 
@@ -143,7 +145,7 @@ const wordFrequencies = text => {
 const charNgramFrequencies = (text, n, m = n+1) => {
     const ngrams = new Map()
     //const re = new RegExp(`(?<=\\s+)(\\w{${n},${m}})(?=\\s+|\\W+)`, 'gi')
-    const re = new RegExp(`\\w{${n},${m}}`, 'gi')
+    const re = new RegExp(`\\b\\w{${n},${m}}\\b`, 'gi')
     const matches = text.matchAll(re)
     let count = 0
     for(const ng of matches) {
@@ -153,6 +155,8 @@ const charNgramFrequencies = (text, n, m = n+1) => {
     }
 
     return {
+        n,
+        m,
         ngrams: 
             [...ngrams.entries()]
                 .sort((a, b) => b[1] === a[1] ? -b[0].localeCompare(a[0]) : b[1] - a[1])
@@ -176,12 +180,12 @@ const generateWordNgrams = (words, n) => {
 }
 
 // calculate word n-gram of size n frequency
-const wordNgramsFrequencies = (text, n) => {
+const wordNgramsFrequencies = (text, n, m) => {
     const sentences = text.matchAll(/(.*)[.!?]+?/g)
     const ngrams = new Map()
     for(s of sentences) {
         const words = [...s[0].matchAll(/\b\w+['-]?\w*\b/g)].map(w => w[0])
-        generateWordNgrams(words, n).forEach(
+        generateWordNgrams(words, n, m).forEach(
             ng => ngrams.set(ng, ngrams.has(ng) ? ngrams.get(ng)+1 : 1)
         )
     }
