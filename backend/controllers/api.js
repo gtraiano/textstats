@@ -4,31 +4,31 @@ const api = require('express').Router()
 
 api.post('/letterfreqs', (req, res) => {
     if(!Object.keys(req.body) || !req.body.text)
-        return res.status(400)
+        return res.status(400).end()
     res.json(letterFrequencies(req.body.text))
 })
 
 api.post('/wordfreqs', (req, res) => {
     if(!Object.keys(req.body) || !req.body.text)
-        return res.status(400)
+        return res.status(400).end()
     res.json(wordFrequencies(req.body.text))
 })
 
 api.post('/textstats', (req, res) => {
     if(!Object.keys(req.body) || !req.body.text)
-        return res.status(400)
+        return res.status(400).end()
     res.json(textStats(req.body.text))
 })
 
 api.post('/charngramfreqs', (req, res) => {
-    if(!Object.keys(req.body) || !req.body.text)
-        return res.status(400)
+    if(!Object.keys(req.body) || !req.body.text || !req.body.n)
+        return res.status(400).end()
     res.json(charNgramFrequencies(req.body.text, req.body.n, req.body.m))
 })
 
 api.post('/wordngramfreqs', (req, res) => {
-    if(!Object.keys(req.body) || !req.body.text)
-        return res.status(400)
+    if(!Object.keys(req.body) || !req.body.text || !req.body.n)
+        return res.status(400).end()
     res.json(wordNgrams(req.body.text, req.body.n, req.body.m))
 })
 
