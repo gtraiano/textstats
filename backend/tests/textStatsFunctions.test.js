@@ -24,6 +24,9 @@ describe('wordCount', () => {
     test('string with punctuation', () => {
         expect(wordCount('This, I dare say, contains punctuation.')).toBe(6)
     })
+    test('string with numerical and punctuation', () => {
+        expect(wordCount('This, I dare say, contains punctuation. It has 11 words.')).toBe(10)
+    })
 })
 
 describe('whitespaceCount', () => {
@@ -130,13 +133,13 @@ describe('sentencesCount', () => {
 })
 
 describe('linesCount', () => {
-  test('empty string', () => {
-      expect(linesCount('')).toBe(1)
-  })
-  test('null string', () => {
-      expect(sentencesCount(null)).toBe(undefined)
-  })
-  test('string with 2 lines', () => {
-      expect(sentencesCount('One line.\nTwo lines.')).toBe(2)
-  })
+    test('empty string', () => {
+        expect(linesCount('')).toBe(1)
+    })
+    test('null string', () => {
+        expect(sentencesCount(null)).toBe(undefined)
+    })
+    test('string with 2 lines', () => {
+        expect(sentencesCount('One line.\nTwo lines.')).toBe(2)
+    })
 })
