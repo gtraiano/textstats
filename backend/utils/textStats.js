@@ -1,10 +1,11 @@
+const regex = require('../utils/regex')
+
 // counts words in text
 const wordCount = (text) => {
     if(text === null || text === undefined) return undefined
-    //const word = new RegExp(/\w+[-']?\w+/gi)
-    const word = new RegExp(/['"]\w+['"]|\w+'\w+|(\w+(?:[-]?\w+){0,3})/g) // quoted word|word with apostrophe|word[hyphenated]
+
     let count = 0
-    const matches = text.matchAll(word)
+    const matches = text.matchAll(regex.word)
     for(_ of matches) {
         count++
     }
@@ -14,8 +15,8 @@ const wordCount = (text) => {
 //counts whitespace characters in text
 const whitespaceCount = text => {
     if(text === null || text === undefined) return undefined
-    const re = new RegExp(/\s/g)
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.whiteSpace)
     let count = 0
     for(_ of matches) {
         count++
@@ -26,8 +27,8 @@ const whitespaceCount = text => {
 //counts alphabetic characters in text
 const alphabeticCount = (text) => {
     if(text === null || text === undefined) return undefined
-    const re = new RegExp(/[a-zA-Z]/g)
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.alphabetic)
     let upperCount = lowerCount = 0
     for(c of matches) {
         c[0] === c[0].toUpperCase() ? upperCount++ : lowerCount++
@@ -43,8 +44,8 @@ const alphabeticCount = (text) => {
 //counts digit characters in text
 const digitCount = text => {
     if(text === null || text === undefined) return undefined
-    const re = new RegExp(/\d/g)
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.digit)
     let count = 0
     for(_ of matches) {
         count++
@@ -56,8 +57,8 @@ const digitCount = text => {
 const punctuationCount = text => {
     if(text === null || text === undefined) return undefined
     const punct = new Map()
-    const re = new RegExp(/\.|\?|\!|\,|\:|\;|\–|\-|\[|\]|\{|\}|\(|\)|\'|\"|\.{3}/g)
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.punctuation)
     let count = 0
     for(const p of matches) {
         count++
@@ -72,9 +73,8 @@ const punctuationCount = text => {
 // count sentences of text
 const sentencesCount = text => {
     if(text === null || text === undefined) return undefined
-// https://stackoverflow.com/questions/5553410/regular-expression-match-a-sentence
-    const re = new RegExp(/[^.!?\s][^.!?]*(?:[.!?](?!['"]?\s|$)[^.!?]*)*[.!?]?['"]?(?=\s|$)/, 'gi')
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.sentence)
     let count = 0
     for(_ of matches) {
         count++
@@ -85,7 +85,8 @@ const sentencesCount = text => {
 // count lines of text
 const linesCount = text => {
     if(text === null || text === undefined) return undefined
-    const matches = text.matchAll(/\n/g)
+
+    const matches = text.matchAll(regex.newLine)
     let count = 0
     for(_ of matches) {
         count++
@@ -96,9 +97,8 @@ const linesCount = text => {
 // word frequency in text
 const wordFrequencies = text => {
     const words = new Map()
-    //const re = new RegExp(/\w+[-']?\w+/g)
-    const re = new RegExp(/['"]\w+['"]|\w+'\w+|(\w+(?:[-]?\w+){0,3})/g) // quoted word|word with apostrophe|word[hyphenated]
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.word)
     const wordsTotal = wordCount(text)
     for(const w of matches) {
         words.set(
@@ -141,17 +141,30 @@ const wordFrequencies = text => {
     }
 }
 
+// generates character n-grams from word for given n
+const generateCharNgrams = (word, n) => {
+    let ngrams = []
+    for(let i = 0; i < word.length - n+1; i++) {
+        ngrams.push(word.substring(i, i+n))
+    }
+    return ngrams
+}
+
 // character n-gram stats (for size n to m)
 const charNgramFrequencies = (text, n, m = n+1) => {
     const ngrams = new Map()
-    //const re = new RegExp(`(?<=\\s+)(\\w{${n},${m}})(?=\\s+|\\W+)`, 'gi')
-    const re = new RegExp(`\\b\\w{${n},${m}}\\b`, 'gi')
-    const matches = text.matchAll(re)
+
+    const matches = text.matchAll(regex.word)
     let count = 0
+    let wng = []
     for(const ng of matches) {
-        count++
-        //ngrams.set(ng[1].toLowerCase(), ngrams.has(ng[1].toLowerCase()) ? ngrams.get(ng[1].toLowerCase()) + 1 : 1)
-        ngrams.set(ng[0].toLowerCase(), ngrams.has(ng[0].toLowerCase()) ? ngrams.get(ng[0].toLowerCase()) + 1 : 1)
+        for(let i = n; i <= m; i++) {
+            wng = generateCharNgrams(ng[0], i)
+            wng.forEach(ng => {
+                count++
+                ngrams.set(ng.toLowerCase(), ngrams.has(ng.toLowerCase()) ? ngrams.get(ng.toLowerCase()) + 1 : 1)
+            })
+        }
     }
 
     return {
@@ -181,10 +194,10 @@ const generateWordNgrams = (words, n) => {
 
 // calculate word n-gram of size n frequency
 const wordNgramsFrequencies = (text, n, m) => {
-    const sentences = text.matchAll(/(.*)[.!?]+?/g)
+    const sentences = text.matchAll(regex.sentence)
     const ngrams = new Map()
     for(s of sentences) {
-        const words = [...s[0].matchAll(/\b\w+['-]?\w*\b/g)].map(w => w[0])
+        const words = [...s[0].matchAll(regex.word)].map(w => w[0])
         generateWordNgrams(words, n, m).forEach(
             ng => ngrams.set(ng, ngrams.has(ng) ? ngrams.get(ng)+1 : 1)
         )
@@ -218,9 +231,7 @@ const letterFrequencies = (text) => {
         return null
     }
     const letters = new Map()
-    //const re = new RegExp(/\w/g)
-    const re = new RegExp(/[a-zA-Z]/g)
-    const matches = text.matchAll(re)
+    const matches = text.matchAll(regex.alphabetic)
     const lettersTotal = alphabeticCount(text).total
     //let upperCount = 0
     //let lowerCount = 0
