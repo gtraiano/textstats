@@ -214,13 +214,23 @@ describe('/charngramfreqs', () => {
 
     test('text including digits and punctuation', async () => {
         const text = 'one word one word two word 1,2!\n'
+        const n = 2, m = 3
         const response = await api
             .post(apiRoutes.charNgramFreqs)
-            .send({ text, n: 2, m: 3 })
-        const ngrams = new Set(text.match(/\b\w{2,3}\b/g))
+            .send({ text, n, m })
+        
+        let ngrams = []
+        text.match(/\b\w+\b/g).forEach(word => {
+            for(let i = n; i <= m; i++) {
+                for(let j = 0; j < word.length - i+1; j++) {
+                    ngrams.push(word.substring(j, j+i))
+                }
+            }
+        })
+        
         expect(response.status).toBe(200)
-        expect(response.body.unique).toBe(ngrams.size)
-        expect(response.body.total).toBe(text.match(/\b\w{2,3}\b/g).length)
+        expect(response.body.unique).toBe((new Set(ngrams)).size)
+        expect(response.body.total).toBe(ngrams.length)
     })
 })
 
@@ -248,14 +258,18 @@ describe('/wordngramfreqs', () => {
     })
 
     test('text including digits and punctuation', async () => {
-        const text = 'one word one word two word 1,2!\n'
+        const text = 'one word one-word two word 1,2!\n'
+        const n = 2, m = 3
         const response = await api
             .post(apiRoutes.wordNgramFreqs)
-            .send({ text, n: 2 })
-        
+            .send({ text, n, m })
+        // n=2 ['one word', 'word one-word', 'one-word two', 'two word', 'word 1', '1 2'] => 6 total, 6 unique
         expect(response.status).toBe(200)
         expect(response.body[0].unique).toBe(6)
-        expect(response.body[0].total).toBe(7)
+        expect(response.body[0].total).toBe(6)
+        // n=3 ['one word one-word', 'word one-word two', 'one-word two word', 'two word 1', 'word 1 2'] => 5 total, 5 unique
+        expect(response.body[1].unique).toBe(5)
+        expect(response.body[1].total).toBe(5)
     })
 })
 
