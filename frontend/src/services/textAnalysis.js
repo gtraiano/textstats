@@ -30,7 +30,7 @@ const welcome = async () => {
     return (await axios.get(config.backendUrl)).data
 }
 
-export const getRoutes = async () => {
+const getRoutes = async () => {
     return Object.fromEntries(
         Object.entries(
             (await axios.get(`${config.backendUrl}/routes`)).data

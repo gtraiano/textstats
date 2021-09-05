@@ -83,6 +83,28 @@ describe('/letterfreqs', () => {
         expect(response.body.wordCount).toBe(2)
     })
 
+    test('mixed case letters', async () => {
+        const response = await api
+            .post(apiRoutes.letterFreqs)
+            .send({ text: 'abc ABCd'})
+
+            expect(response.status).toBe(200)
+        
+            expect(response.body.letterFreqs.a.absolute).toBe(2)
+            expect(response.body.letterFreqs.b.absolute).toBe(2)
+            expect(response.body.letterFreqs.c.absolute).toBe(2)
+            expect(response.body.letterFreqs.d.absolute).toBe(1)
+            
+            expect(response.body.charCount.total).toBe('abc ABCd'.length)
+            expect(response.body.charCount.whitespace).toBe(1)
+            expect(response.body.charCount.alphabetic.lowerCase).toBe(4)
+            expect(response.body.charCount.alphabetic.upperCase).toBe(3)
+            
+            expect(response.body.charCount.digits).toBe(0)
+            expect(response.body.punctuationCount.total).toBe(0)
+            expect(response.body.wordCount).toBe(2)
+    })
+
     test('only non-alphabetic characters', async () => {
         const response = await api
             .post(apiRoutes.letterFreqs)

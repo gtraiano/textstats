@@ -31,7 +31,8 @@ const alphabeticCount = (text) => {
     const matches = text.matchAll(regex.alphabetic)
     let upperCount = lowerCount = 0
     for(c of matches) {
-        c[0] === c[0].toUpperCase() ? upperCount++ : lowerCount++
+        //c[0] === c[0].toUpperCase() ? upperCount++ : lowerCount++
+        c[0].normalize("NFD").replace(/\p{Diacritic}/gu, "") === c[0].toUpperCase().normalize("NFD").replace(/\p{Diacritic}/gu, "") ? upperCount++ : lowerCount++
     }
     return {
         upperCase: upperCount,
@@ -237,14 +238,16 @@ const letterFrequencies = (text) => {
     //let lowerCount = 0
     for(const l of matches) {
         //l[0] === l[0].toUpperCase() ? upperCount++ : lowerCount++
+        const normalized = l[0].normalize("NFD").replace(/\p{Diacritic}/gu, "").toLowerCase()
         letters.set(
-            l[0].toLowerCase(),
+            //l[0].toLowerCase(),
+            normalized,
             //letters.has(l[0]) ? letters.get(l[0]) + 1 : 1
-            letters.has(l[0].toLowerCase())
+            letters.has(normalized)
                 ? {
-                    absolute: letters.get(l[0].toLowerCase()).absolute + 1,
-                    relative: letters.get(l[0].toLowerCase()).relative + (1 / lettersTotal),
-                    relativeWithWhiteSpace: letters.get(l[0].toLowerCase()).relative + (1 / text.length),
+                    absolute: letters.get(normalized).absolute + 1,
+                    relative: letters.get(normalized).relative + (1 / lettersTotal),
+                    relativeWithWhiteSpace: letters.get(normalized).relative + (1 / text.length),
                   }
                 : {
                     absolute: 1,
