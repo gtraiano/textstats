@@ -15,12 +15,12 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                         <BarChart
                             style={chartStyle}
                             dataset={
-                            {
+                              {
                                 
                                 labels: Object.keys(charStats.letterFreqs),
                                 values: Object.values(charStats.letterFreqs).map(({ absolute }) => absolute ),
                                 backgroundColors: graphColors.chars.letter
-                            }
+                              }
                             }
                             options={{ chartTitle: 'Letter absolute frequency', chartId: 'letter_freqs_absolute' }}
                         />
@@ -32,12 +32,12 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                         <DoughnutChart 
                             style={chartStyle}
                             dataset={
-                            {
+                              {
                                 label: '% of occurences',
                                 labels: Object.keys(charStats.letterFreqs) || [],
                                 values: Object.values(charStats.letterFreqs).map(({ relative }) => (relative*100).toFixed(2) ) || null,
                                 backgroundColors: graphColors.chars.letter
-                            }
+                              }
                             }
                             options={{ chartTitle: 'Letter relative frequency %', chartId: 'letter_freqs_relevant' }}
                         />
@@ -49,10 +49,10 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                         <BarChart
                             style={chartStyle}
                             dataset={
-                            {
+                              {
                                 labels: Object.keys(charStats?.punctuationCount) || [],
                                 values: Object.values(charStats?.punctuationCount).map(val => val) || null,
-                            }
+                              }
                             }
                             options={{ chartTitle: 'Punctuation absolute frequency', chartId: 'letter_punctuation' }}
                         />
@@ -65,14 +65,19 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                             style={
                                 Object.keys(wordStats.wordFreqs).length <= 35
                                 ? chartStyle
-                                : { ...chartStyle, height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`, position: 'relative', transform: `translateY(${20+Object.keys(wordStats.wordFreqs).length/35}%)`}
+                                : {
+                                    ...chartStyle,
+                                    height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`,
+                                    position: 'relative',
+                                    top: `${Object.keys(wordStats.wordFreqs).length - (Object.keys(wordStats.wordFreqs).length/35)}%`
+                                  }
                             }
                             dataset={
-                                {
+                              {
                                 labels: Object.keys(wordStats?.wordFreqs) || [],
                                 values: Object.values(wordStats?.wordFreqs).map(({ absolute }) => absolute) || null,
                                 backgroundColors: graphColors.words
-                                }
+                              }
                             }
                             options={{ chartTitle: 'Word absolute frequency', verticalXAxisLabels: true, indexAxis: 'y', chartId: 'word_freqs_absolute' }}
                         />
@@ -84,12 +89,12 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                         <DoughnutChart
                             style={chartStyle}
                             dataset={
-                                {
+                              {
                                 label: '% of occurences',
                                 labels: Object.keys(wordStats.wordFreqs),
                                 values: Object.values(wordStats.wordFreqs).map(({ relative }) => (relative*100).toFixed(2)),
                                 backgroundColors: graphColors.words
-                                }
+                              }
                             }
                             options={{ chartTitle: 'Word relative frequency %', chartId: 'word_freqs_relative' }}
                         />
@@ -103,29 +108,33 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                             style={
                                 Object.keys(wordStats.wordFreqs).length <= 35
                                 ? chartStyle
-                                : { ...chartStyle, height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`, position: 'relative', transform: `translateY(${20+Object.keys(wordStats.wordFreqs).length/35}%)`}
+                                : {
+                                    ...chartStyle,
+                                    height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`,
+                                    position: 'relative',
+                                    top: `${Object.keys(wordStats.wordFreqs).length - (Object.keys(wordStats.wordFreqs).length/35)}%`,
+                                  }
                             }
                             dataset={
-                                {
+                              {
                                 labels: Object.keys(wordStats?.wordFreqs) || [],
                                 datasets: [
-                                    {
+                                  {
                                     label: 'relative %',
                                     data: Object.values(wordStats?.wordFreqs).map(({ absolute, relative }) => 100*Number.parseFloat(relative)) || null,
                                     backgroundColor: 'rgba(54, 162, 235, 0.2)',
                                     borderColor: 'rgb(54, 162, 235)',
                                     fill: true
-                                    },
-                                    {
+                                  },
+                                  {
                                     label: 'absolute',
                                     data: wordStats ? Object.values(wordStats.wordFreqs).map(({ absolute, relative }) => Number.parseFloat(absolute)) : null,
                                     backgroundColor: 'rgba(255, 99, 132, 0.2)',
                                     borderColor: 'rgb(255, 99, 132)',
                                     fill: true
-                                    }
+                                  }
                                 ],
-                                
-                                }
+                              }
                             }
                             options={{ chartId: 'radar_chart', chartTitle: 'Word frequency' }}
                         />
