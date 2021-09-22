@@ -11,24 +11,29 @@ import Charts from './components/Charts'
 
 
 import './App.css'
+import './styles/loader.css'
 
 function App() {
   const [text, setText] = useState('') // textarea
+  // text analysis statistics
   const [charStats, setCharStats] = useState(null)
   const [wordStats, setWordStats] = useState(null)
   const [textStats, setTextStats] = useState(null)
   const [charNgramStats, setCharNgramStats] = useState(null)
   const [wordNgramStats, setWordNgramStats] = useState(null)
+  
   const [graphColors, setGraphColors] = useState(null) // colors used for graphs ({ chars: { letter: [], punctuation: [] }, words: [] })
   const [showStat, setShowStat] = useState({ letters: true, text: false, characters: false, word: false, ngram: false }) // display stats tables
-  const [isAnalysisReady, setIsAnalysisReady] = useState(false)
+  const [isAnalysisReady, setIsAnalysisReady] = useState(undefined)
   const [canvasDataset, setCanvasDataset] = useState({
     n: 10,
     label: '',
     data: []
   })
+
   const canvasRef = React.createRef()
-  const overlayRef = React.createRef()
+  const chartsOverlayRef = React.createRef()
+  const progressOverlayRef = React.createRef()
   
   useEffect(() => {
     textAnalysis.welcome().then(data => console.log(data))
@@ -58,11 +63,22 @@ function App() {
             .slice(0, canvasDataset.n)
             .map(w => ({ term: w[0], value: w[1].absolute }))
         }
-        
       )
       setTimeout(() => canvasRef.current && canvasRef.current.drawCanvas(), 250)
     }//eslint-disable-next-line
   }, [isAnalysisReady])
+
+  useEffect(() => {
+    if(isAnalysisReady) {
+      progressOverlayRef.current.hide()
+    }
+    else if(isAnalysisReady === false) {
+        progressOverlayRef.current.show()
+    }
+    else if(isAnalysisReady === undefined && charStats !== null) { // first call to text analysis
+      progressOverlayRef.current.show()
+    }
+  }, [charStats, isAnalysisReady, progressOverlayRef])
 
   useEffect(() => {
     localStorage.setItem('textarea-text', text)
@@ -95,7 +111,7 @@ function App() {
       })
       setCharNgramStats(cngResponse)
       setWordNgramStats(wngResponse)
-      
+
       setIsAnalysisReady(true)
     }
     catch(error) {
@@ -112,7 +128,7 @@ function App() {
     }
   }
 
-  const displayTable = (e, name) => {
+  const displayStatTable = (e, name) => {
     if(name === 'all') {
       setShowStat(Object.fromEntries(Object.keys(showStat).map((key) => [key, true])))
     }
@@ -131,6 +147,20 @@ function App() {
   
   return (
     <div className="App">
+      {/* text analysis progress overlay */}
+      <Overlay
+        ref={progressOverlayRef}
+        style={{ backgroundColor: 'white', opacity: 0.9 }}
+        disableX
+        disableClose
+      >
+        <div style={{ width: '100%', height: '100%', textAlign: 'center' }}>
+          <h1 style={{ marginTop: '40vh' }}>Analyzing text</h1>
+          <div class="loader"></div>
+        </div>
+        
+      </Overlay>
+      
       <h1 style={{marginBottom: 0, padding: 0}}>Text Statistics</h1>
       <StatsCanvas
         ref={canvasRef}
@@ -169,12 +199,12 @@ function App() {
             }}
             title="crtl+click to select multiple categories"
           >
-            <button type="navigation" className={showStat.letters ? 'active' : null} onClick={(e) => displayTable(e, 'letters')}>letters</button>
-            <button type="navigation" className={showStat.characters ? 'active' : null} onClick={(e) => displayTable(e, 'characters')}>characters</button>
-            <button type="navigation" className={showStat.word ? 'active' : null} onClick={(e) => displayTable(e, 'word')}>words</button>
-            <button type="navigation" className={showStat.ngram ? 'active' : null} onClick={(e) => displayTable(e, 'ngram')}>n-grams</button>
-            <button type="navigation" className={showStat.text ? 'active' : null} onClick={(e) => displayTable(e, 'text')}>text</button>
-            <button type="navigation" className={Object.values(showStat).reduce((acc, cur) => acc && cur, true) ? 'active-all' : null} onClick={(e) => displayTable(e, 'all')}>all</button>
+            <button type="navigation" className={showStat.letters ? 'active' : null} onClick={(e) => displayStatTable(e, 'letters')}>letters</button>
+            <button type="navigation" className={showStat.characters ? 'active' : null} onClick={(e) => displayStatTable(e, 'characters')}>characters</button>
+            <button type="navigation" className={showStat.word ? 'active' : null} onClick={(e) => displayStatTable(e, 'word')}>words</button>
+            <button type="navigation" className={showStat.ngram ? 'active' : null} onClick={(e) => displayStatTable(e, 'ngram')}>n-grams</button>
+            <button type="navigation" className={showStat.text ? 'active' : null} onClick={(e) => displayStatTable(e, 'text')}>text</button>
+            <button type="navigation" className={Object.values(showStat).reduce((acc, cur) => acc && cur, true) ? 'active-all' : null} onClick={(e) => displayStatTable(e, 'all')}>all</button>
           </div>
         </div>
 
@@ -220,12 +250,13 @@ function App() {
         {isAnalysisReady &&
           <button
             style={{ marginTop: '1%', marginBottom: '1%' }}
-            onClick={() => {overlayRef.current.show();}}
+            onClick={() => {chartsOverlayRef.current.show();}}
           >
             show graphs
           </button>
         }
-        <Overlay ref={overlayRef}>
+        {/* charts overlay */}
+        <Overlay ref={chartsOverlayRef}>
           <div style={{ height: 'inherit', overflow: 'auto', scrollbarWidth: 'thin', backgroundColor: 'rgba(255,255,255,0.9)' }}>
             <Charts
               isAnalysisReady={isAnalysisReady}
