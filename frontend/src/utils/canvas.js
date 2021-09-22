@@ -6,6 +6,7 @@ export const prepareCanvas = (canvas) => {
     canvas.style.height = canvas.height + 'px'
 }
 
+// extract text box dimensions from canvas text metrics
 export const textBoxDimensions = textMetrics => {
     return {
       width: textMetrics.actualBoundingBoxRight - textMetrics.actualBoundingBoxLeft,
@@ -14,7 +15,15 @@ export const textBoxDimensions = textMetrics => {
     
 }
 
-// check if rectangle a overlaps rectangle b
+
+/*
+  calculate overlapping area of rectangles a and b (check if rectangle a overlaps rectangle b)
+  rectangle {
+      x: suggested x-coordination
+      y: suggested y-coordination
+      textMetrics: canvas text metrics
+  }
+*/
 export const rectanglesOverlappingArea = (a, b) => {
     //https://math.stackexchange.com/questions/99565/simplest-way-to-calculate-the-intersect-area-of-two-rectangles
     const rectA = {
@@ -37,6 +46,16 @@ export const rectanglesOverlappingArea = (a, b) => {
     return overlapArea
 }
 
+/*
+  check if point is inside canvas
+
+  canvas: HTML canvas to check against
+  point: point to be checked 
+    {
+      x: x-coordinate
+      y: y-coordinate
+    }
+*/
 export const withinCanvas = (canvas, point) => {
     let ctx = canvas.getContext('2d')
     ctx.rect(0, 0, canvas.width, canvas.height)
@@ -49,7 +68,7 @@ export const withinCanvas = (canvas, point) => {
     )
 }
 
-export const checkRectangleCollision = (a, points, ctx) => {      
+export const checkRectangleCollision = (a, points) => {      
     return points.some(p => {
         const cl = rectanglesOverlappingArea(a, p)
         return cl !== 0
