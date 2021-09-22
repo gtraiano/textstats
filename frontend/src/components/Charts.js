@@ -68,8 +68,8 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                                 : {
                                     ...chartStyle,
                                     height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`,
-                                    position: 'relative',
-                                    top: `${Object.keys(wordStats.wordFreqs).length - (Object.keys(wordStats.wordFreqs).length/35)}%`
+                                    position: 'absolute',
+                                    top: '13%'
                                   }
                             }
                             dataset={
@@ -110,9 +110,9 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                                 ? chartStyle
                                 : {
                                     ...chartStyle,
-                                    height: `${100*Object.keys(wordStats.wordFreqs).length/35}%`,
-                                    position: 'relative',
-                                    top: `${Object.keys(wordStats.wordFreqs).length - (Object.keys(wordStats.wordFreqs).length/35)}%`,
+                                    height: `${(100*Object.keys(wordStats.wordFreqs).length/35)/2.5}%`,
+                                    position: 'absolute',
+                                    top: '13%'
                                   }
                             }
                             dataset={
@@ -151,7 +151,7 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
 
     return (
         <div>
-            <div style={{ position: 'absolute', top: '0.25%', width: 'max-content', right: '2%' }}>
+            <div style={{ position: 'absolute', top: '0.25%', width: 'max-content', right: '2%', zIndex: 1 }}>
                 <select
                     value={selectedIndex}
                     style={{ padding: '5px', fontSize: 'medium', backgroundColor: 'transparent', border: '1px solid black', borderRadius: '4px' }}
@@ -161,7 +161,7 @@ const Charts = ({ charStats, graphColors, wordStats, isAnalysisReady }) => {
                 </select>
             </div>
             <div
-                style={{ height: '95vh', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', alignItems: 'center', justifyContent: 'center' }}
+                style={{ height: '100vh', position: 'relative', display: 'flex', flexDirection: 'row', flexWrap: 'nowrap', alignItems: 'center', justifyContent: 'center' }}
             >
                 {charts[selectedIndex].chart}
             </div>
