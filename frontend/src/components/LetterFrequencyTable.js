@@ -24,7 +24,7 @@ const LetterFrequencyTable = ({ show, results, style, showIndex = false }) => {
                         </tr>
                     </thead>
                     <tbody>
-                        {Object.entries(results).map(([key, { absolute, relative, relativeWithWhiteSpace }], index) =>
+                        {results.map(([key, { absolute, relative, relativeWithWhiteSpace }], index) =>
                             <tr key={key}>
                                 {showIndex && <td>{index+1}</td>}
                                 <td>{key}</td>

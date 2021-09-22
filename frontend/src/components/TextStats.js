@@ -19,7 +19,24 @@ const TextStats = ({ show, data, style, title="Text statistics", header=['statis
                     </thead>
                     <tbody>
                         {
-                            Object.entries(data).map(([key, value]) =>
+                            data instanceof Array
+                            ? (data).map(([key, value]) =>
+                                <tr key={key}>
+                                    <td>
+                                        {key !== 'index of coincidence'
+                                            ? key
+                                            : <>
+                                                {key}&nbsp;
+                                                <a style={{textDecorationStyle: 'double', fontWeight: 'lighter'}} href="https://pages.mtu.edu/~shene/NSF-4/Tutorial/VIG/Vig-IOC.html" target="_blank" rel="noreferrer">
+                                                    ?
+                                                </a>
+                                            </>
+                                        }
+                                    </td>
+                                    <td>{value}</td>
+                                </tr>
+                            )
+                            : Object.entries(data).map(([key, value]) =>
                                 <tr key={key}>
                                     <td>
                                         {key !== 'index of coincidence'

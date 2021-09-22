@@ -47,19 +47,21 @@ function App() {
     console.log('character stats', charStats)
     console.log('word stats', wordStats)
     console.log('text stats', textStats)
+    console.log('word ngram stats', wordNgramStats)
     console.log('char ngram stats', charNgramStats)
     if(isAnalysisReady) {
       setGraphColors({
         chars: {
-          letter: Object.keys(charStats.letterFreqs).map(() => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`),
-          punctuation: Object.keys(wordStats.wordFreqs).map(l => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`)
+          letter: charStats.letterFreqs.map(() => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`),
+          //punctuation: Object.keys(wordStats.wordFreqs).map(() => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`)
+          punctuation: Object.keys(charStats.punctuationCount).map(() => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`)
         },
-        words: Object.keys(wordStats.wordFreqs).map(() => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`)
+        words: wordStats.wordFreqs.map(() => `rgb(${Math.ceil(Math.random()*255)}, ${Math.floor(Math.random()*255)}, ${Math.ceil(Math.random()*255)})`)
       })
       setCanvasDataset(
         { ...canvasDataset,
           label: `${canvasDataset.n} most frequent terms in text`,
-          data: Object.entries(wordStats.wordFreqs)
+          data: wordStats.wordFreqs
             .slice(0, canvasDataset.n)
             .map(w => ({ term: w[0], value: w[1].absolute }))
         }
@@ -101,13 +103,13 @@ function App() {
       setTextStats({
         ...tsResponse,
         'unique words': Object.keys(wfResponse.wordFreqs).length,
-        'unique words %': ((Object.keys(wfResponse.wordFreqs).length / tsResponse.words)*100).toFixed(2)+'%',
+        'unique words %': ((wfResponse.wordFreqs.length / tsResponse.words)*100).toFixed(2)+'%',
         'length of shortest word': wfResponse.shortestLength,
         'length of longest word': wfResponse.longestLength,
         'average word length': wfResponse.averageLength.toFixed(2),
         'index of coincidence': //https://pages.mtu.edu/~shene/NSF-4/Tutorial/VIG/Vig-IOC.html
           (1 / ((lfResponse.charCount.total - lfResponse.charCount.whitespace) * (lfResponse.charCount.total - lfResponse.charCount.whitespace - 1 )))
-          * Object.values(lfResponse.letterFreqs).map(l => l.absolute * (l.absolute-1)).reduce((acc, cur) => acc + cur, 0)
+          * lfResponse.letterFreqs.map(([, l]) => l.absolute * (l.absolute-1)).reduce((acc, cur) => acc + cur, 0)
       })
       setCharNgramStats(cngResponse)
       setWordNgramStats(wngResponse)
@@ -236,7 +238,7 @@ function App() {
         />
         <TextStats
           show={showStat.ngram}
-          data={wordNgramStats?.map(n => n.ngrams).reduce((acc, cur) => ({ ...acc, ...cur }), {})}
+          data={wordNgramStats?.flatMap(ng => [...ng.ngrams]).map(ng => ng)}
           header={['n-gram', 'frequency']}
           title="Word n-gram occurences"
           style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}

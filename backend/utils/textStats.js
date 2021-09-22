@@ -122,18 +122,21 @@ const wordFrequencies = text => {
         wordFreqs:
             [...words.entries()]
                 .sort((a,b) => {
+                    if(b[1].absolute === a[1].absolute) {
+                        return a[0].localeCompare(b[0]);
+                    }
                     return b[1].absolute - a[1].absolute
                 })
-                .sort((a, b) => { // sort equal frequencies by key ascending
+                /*.sort((a, b) => { // sort equal frequencies by key ascending
                     if(b[1].absolute === a[1].absolute) {
                         return b[0] < a[0] ? 1 : -1
                         //return b[0].localeCompare(a[0])
                     }
-                })
-                .reduce(
+                })*/
+                /*.reduce(
                     (acc, cur) => ({ ...acc, [cur[0]]: cur[1] }),
                     {}
-                )
+                )*/
         ,
         wordCount: wordsTotal,
         shortestLength: Math.min(...[...words.entries()].map(w => w[0].length)),
@@ -174,10 +177,10 @@ const charNgramFrequencies = (text, n, m = n+1) => {
         ngrams: 
             [...ngrams.entries()]
                 .sort((a, b) => b[1] === a[1] ? -b[0].localeCompare(a[0]) : b[1] - a[1])
-                .reduce(
+                /*.reduce(
                     (acc, cur) => ({ ...acc, [cur[0]]: cur[1] }),
                     {}
-                ),
+                )*/,
         unique: ngrams.size,
         total: count
     }
@@ -208,10 +211,10 @@ const wordNgramsFrequencies = (text, n, m) => {
         ngrams:
             [...ngrams.entries()]
                 .sort((a, b) => b[1] !== a[1] ? b[1] - a[1] : a[0].localeCompare(b[0]))
-                .reduce(
+                /*.reduce(
                     (acc, cur) => ({ ...acc, [cur[0]]: cur[1] }),
                     {}
-                ),
+                )*/,
         unique: ngrams.size,
         total: [...ngrams.values()].reduce((acc, cur) => acc + cur, 0)
     }
@@ -269,10 +272,10 @@ const letterFrequencies = (text) => {
                         return b[0] < a[0] ? 1 : -1
                     }
                 })
-                .reduce(
+                /*.reduce(
                     (acc, cur) => ({ ...acc, [cur[0]]: cur[1] }),
                     {}
-                )
+                )*/
         ,
         charCount: {
             total: text.length,
@@ -281,11 +284,11 @@ const letterFrequencies = (text) => {
             digits: digitCount(text)
         },
         punctuationCount: {
-            ...[...punctuation.punct.entries()]
-            .reduce(
+            punct: [...punctuation.punct.entries()]
+            /*.reduce(
                 (acc, cur) => ({ ...acc, [cur[0]]: cur[1] }),
                 {}
-            ),
+            )*/,
             total: punctuation.count
         },
         wordCount: wordCount(text),

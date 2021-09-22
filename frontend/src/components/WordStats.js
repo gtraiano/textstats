@@ -21,7 +21,8 @@ const WordStats = ({ show, data, style, showIndex = true }) => {
                     </thead>
                     <tbody>
                         {
-                            Object.entries(data.wordFreqs).map(([key, value], index) =>
+                            //Object.entries(data.wordFreqs).map(([key, value], index) =>
+                            data.wordFreqs.map(([key, value], index) =>
                                 <tr key={key}>
                                     {showIndex && <td>{index+1}</td>}
                                     <td>{key}</td>

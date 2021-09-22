@@ -52,11 +52,19 @@ const CharacterStats = ({ show, data, style }) => {
                         {
                             Object.entries(data.punctuationCount).map(([key, value]) => {
                                 return (
-                                    <tr key={key}>
-                                        <td></td>
-                                        <td>{key}</td>
-                                        <td>{value}</td>
-                                    </tr>
+                                    value instanceof Array
+                                        ? value.map(([k, v]) =>
+                                            <tr key={k}>
+                                                <td></td>
+                                                <td>{k}</td>
+                                                <td>{v}</td>
+                                            </tr>
+                                        )
+                                        : <tr key={key}>
+                                            <td></td>
+                                            <td>{key}</td>
+                                            <td>{value}</td>
+                                        </tr>
                                 )
                             })
                         }
