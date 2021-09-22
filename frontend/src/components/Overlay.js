@@ -1,7 +1,13 @@
 import '../styles/Overlay.css'
 import React, { useEffect, useCallback, useRef } from 'react';
 
-const Overlay = React.forwardRef(({ children }, ref) => {
+/*
+style         CSS style object for overlay body
+disableClose  set true to disable close button
+disableX      set true to disable X close button
+*/
+
+const Overlay = React.forwardRef(({ children, style, disableClose, disableX }, ref) => {
     React.useImperativeHandle(ref, () => {
         return {
             // expose methods for showing/hiding overlay
@@ -77,35 +83,39 @@ const Overlay = React.forwardRef(({ children }, ref) => {
   
   return (
   	<div
-      style={{backdropFilter: 'blur(10px)'}}
+      style={{ backdropFilter: 'blur(10px)', ...style }}
       className="overlay"
   	  ref={overlayRef}
       tabIndex="0"
   	>
   	  {children}
       {/* overlay close button */}
-      <div style={{ position: 'absolute', width: '100%', top: '90%' }} className="link-button-container">
-        <button
-          type="button"
-          onClick={event => { event.preventDefault(); closeOverlay(); }}
-        >
-          close
-        </button>
-      </div>
+      { !disableClose &&
+        <div style={{ position: 'absolute', width: '100%', top: '90%' }} className="link-button-container">
+          <button
+            type="button"
+            onClick={event => { event.preventDefault(); closeOverlay(); }}
+          >
+            close
+          </button>
+        </div>
+      }
         
       {/* overlay close (X) button */}
-      <button
-        className="link-button"
-        onClick={event => { event.preventDefault(); closeOverlay(); }}
-        style={{ position: 'absolute', width: '2%', padding: 0, margin: 0, top: 0, left: '98%' }}
-      >
-        <a
-          href="#close"
-          style={{ fontWeight: 800, fontSize: '150%', color: 'black', textDecoration: 'none' }}
+      { !disableX &&
+        <button
+          className="link-button"
+          onClick={event => { event.preventDefault(); closeOverlay(); }}
+          style={{ position: 'absolute', width: '2%', padding: 0, margin: 0, top: 0, left: '98%' }}
         >
-          x
-        </a>
-      </button>
+          <a
+            href="#close"
+            style={{ fontWeight: 800, fontSize: '150%', color: 'black', textDecoration: 'none' }}
+          >
+            x
+          </a>
+        </button>
+      }
     </div>
   )
 });
