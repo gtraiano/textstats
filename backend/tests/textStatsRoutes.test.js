@@ -45,11 +45,11 @@ describe('/letterfreqs', () => {
             .send({ text: 'abc abcd'})
 
         expect(response.status).toBe(200)
-        
-        expect(response.body.letterFreqs.a.absolute).toBe(2)
-        expect(response.body.letterFreqs.b.absolute).toBe(2)
-        expect(response.body.letterFreqs.c.absolute).toBe(2)
-        expect(response.body.letterFreqs.d.absolute).toBe(1)
+
+        expect(response.body.letterFreqs.find(l => l[0] === 'a')[1].absolute).toBe(2)
+        expect(response.body.letterFreqs.find(l => l[0] === 'b')[1].absolute).toBe(2)
+        expect(response.body.letterFreqs.find(l => l[0] === 'c')[1].absolute).toBe(2)
+        expect(response.body.letterFreqs.find(l => l[0] === 'd')[1].absolute).toBe(1)
         
         expect(response.body.charCount.total).toBe('abc abcd'.length)
         expect(response.body.charCount.whitespace).toBe(1)
@@ -67,11 +67,11 @@ describe('/letterfreqs', () => {
             .send({ text: 'abc abcd'.toUpperCase()})
 
         expect(response.status).toBe(200)
-        
-        expect(response.body.letterFreqs.a.absolute).toBe(2)
-        expect(response.body.letterFreqs.b.absolute).toBe(2)
-        expect(response.body.letterFreqs.c.absolute).toBe(2)
-        expect(response.body.letterFreqs.d.absolute).toBe(1)
+
+        expect(response.body.letterFreqs.find(l => l[0] === 'a')[1].absolute).toBe(2)
+        expect(response.body.letterFreqs.find(l => l[0] === 'b')[1].absolute).toBe(2)
+        expect(response.body.letterFreqs.find(l => l[0] === 'c')[1].absolute).toBe(2)
+        expect(response.body.letterFreqs.find(l => l[0] === 'd')[1].absolute).toBe(1)
         
         expect(response.body.charCount.total).toBe('abc abcd'.length)
         expect(response.body.charCount.whitespace).toBe(1)
@@ -89,11 +89,11 @@ describe('/letterfreqs', () => {
             .send({ text: 'abc ABCd'})
 
             expect(response.status).toBe(200)
-        
-            expect(response.body.letterFreqs.a.absolute).toBe(2)
-            expect(response.body.letterFreqs.b.absolute).toBe(2)
-            expect(response.body.letterFreqs.c.absolute).toBe(2)
-            expect(response.body.letterFreqs.d.absolute).toBe(1)
+
+            expect(response.body.letterFreqs.find(l => l[0] === 'a')[1].absolute).toBe(2)
+            expect(response.body.letterFreqs.find(l => l[0] === 'b')[1].absolute).toBe(2)
+            expect(response.body.letterFreqs.find(l => l[0] === 'c')[1].absolute).toBe(2)
+            expect(response.body.letterFreqs.find(l => l[0] === 'd')[1].absolute).toBe(1)
             
             expect(response.body.charCount.total).toBe('abc ABCd'.length)
             expect(response.body.charCount.whitespace).toBe(1)
@@ -164,12 +164,12 @@ describe('/wordfreqs', () => {
                     .reduce((acc, cur, i, arr) => i < arr.length - 1 ? acc + cur.length : (acc + cur.length)/arr.length, 0)
             )
 
-            expect(response.body.wordFreqs['one'].absolute).toBe(1)
-            expect(response.body.wordFreqs['two'].absolute).toBe(1)
-            expect(response.body.wordFreqs['word'].absolute).toBe(2)
+            expect(response.body.wordFreqs.find(w => w[0] === 'one')[1].absolute).toBe(1)
+            expect(response.body.wordFreqs.find(w => w[0] === 'two')[1].absolute).toBe(1)
+            expect(response.body.wordFreqs.find(w => w[0] === 'word')[1].absolute).toBe(2)
 
-            expect(response.body.wordFreqs['1'].absolute).toBe(1)
-            expect(response.body.wordFreqs['2'].absolute).toBe(1)
+            expect(response.body.wordFreqs.find(w => w[0] === '1')[1].absolute).toBe(1)
+            expect(response.body.wordFreqs.find(w => w[0] === '2')[1].absolute).toBe(1)
     })
 })
 
