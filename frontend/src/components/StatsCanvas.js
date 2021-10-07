@@ -70,7 +70,7 @@ const StatsCanvas = React.forwardRef((
         return null
     return (
       <div style={containerStyle}>
-        <canvas ref={canvasRef} style={{ width: '100%', height: '100%', imageRendering: 'pixelated' }}></canvas>
+        <canvas ref={canvasRef} style={{ width: '100%', height: '100%', imageRendering: 'auto' }}></canvas>
         {canvasLabel && <label style={canvasLabelStyle}>{canvasLabel}</label>}
         <br/>
         {children}
