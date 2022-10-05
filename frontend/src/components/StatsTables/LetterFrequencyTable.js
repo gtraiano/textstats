@@ -1,5 +1,5 @@
 import React from 'react'
-import '../styles/ResultsTable.css'
+import '../../styles/ResultsTable.css'
 
 const LetterFrequencyTable = ({ show, results, style, showIndex = false }) => {
     if(!results || !show) {

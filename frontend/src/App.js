@@ -1,9 +1,5 @@
 import React, { useEffect, useState } from 'react'
 import textAnalysis from './services/textAnalysis'
-import LetterFrequencyTable from './components/LetterFrequencyTable'
-import CharacterStats from './components/CharacterStats'
-import TextStats from './components/TextStats'
-import WordStats from './components/WordStats'
 import StatsCanvas from './components/StatsCanvas'
 import { addConfigParam } from './utils/config'
 import Overlay from './components/Overlay'
@@ -12,6 +8,7 @@ import Charts from './components/Charts'
 
 import './App.css'
 import './styles/loader.css'
+import Statistics from './components/Statistics'
 
 function App() {
   const [text, setText] = useState('') // textarea
@@ -23,7 +20,6 @@ function App() {
   const [wordNgramStats, setWordNgramStats] = useState(null)
   
   const [graphColors, setGraphColors] = useState(null) // colors used for graphs ({ chars: { letter: [], punctuation: [] }, words: [] })
-  const [showStat, setShowStat] = useState({ letters: true, text: false, characters: false, word: false, ngram: false }) // display stats tables
   const [isAnalysisReady, setIsAnalysisReady] = useState(undefined)
   const [canvasDataset, setCanvasDataset] = useState({
     n: 10,
@@ -137,23 +133,6 @@ function App() {
       console.error(error)
     }
   }
-
-  const displayStatTable = (e, name) => {
-    if(name === 'all') {
-      setShowStat(Object.fromEntries(Object.keys(showStat).map((key) => [key, true])))
-    }
-    else {
-      if(!e.ctrlKey) {
-        setShowStat(Object.fromEntries(Object.entries(showStat).map(([key, value]) => [key, key === name ? true : false])))
-      }
-      else { // ctrl+click
-        setShowStat({
-          ...showStat,
-          [name]: !showStat[name]
-        })
-      }
-    }
-  }
   
   return (
     <div className="App">
@@ -194,68 +173,14 @@ function App() {
       </div>
       
       <div className="results">
-        <div
-          style={{
-            display: isAnalysisReady ? 'inline-block' : 'none',
-            width: '100%'
-          }}
-        >
-          <div
-            style={{
-              position: 'relative',
-              width: 'max-content',
-              left: '25%'
-            }}
-            title="crtl+click to select multiple categories"
-          >
-            <button type="navigation" className={showStat.letters ? 'active' : null} onClick={(e) => displayStatTable(e, 'letters')}>letters</button>
-            <button type="navigation" className={showStat.characters ? 'active' : null} onClick={(e) => displayStatTable(e, 'characters')}>characters</button>
-            <button type="navigation" className={showStat.word ? 'active' : null} onClick={(e) => displayStatTable(e, 'word')}>words</button>
-            <button type="navigation" className={showStat.ngram ? 'active' : null} onClick={(e) => displayStatTable(e, 'ngram')}>n-grams</button>
-            <button type="navigation" className={showStat.text ? 'active' : null} onClick={(e) => displayStatTable(e, 'text')}>text</button>
-            <button type="navigation" className={Object.values(showStat).reduce((acc, cur) => acc && cur, true) ? 'active-all' : null} onClick={(e) => displayStatTable(e, 'all')}>all</button>
-          </div>
-        </div>
-
-        <LetterFrequencyTable
-          show={showStat.letters}
-          results={charStats?.letterFreqs}
-          style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}
+        <Statistics
+          isAnalysisReady={isAnalysisReady}
+          charStats={charStats}
+          wordStats={wordStats}
+          charNgramStats={charNgramStats}
+          wordNgramStats={wordNgramStats}
+          textStats={textStats}
         />
-        <CharacterStats
-          show={showStat.characters}
-          data={
-            charStats
-            ? { ...charStats?.charCount, wordCount: charStats?.wordCount, punctuationCount: charStats?.punctuationCount }
-            : null
-          }
-          style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}
-        />
-        <WordStats
-          show={showStat.word}
-          data={wordStats}
-          style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}
-        />
-        <TextStats
-          show={showStat.ngram}
-          data={charNgramStats?.ngrams}
-          header={['n-gram', 'frequency']}
-          title="Character n-gram occurences"
-          style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}
-        />
-        <TextStats
-          show={showStat.ngram}
-          data={wordNgramStats?.flatMap(ng => [...ng.ngrams]).map(ng => ng)}
-          header={['n-gram', 'frequency']}
-          title="Word n-gram occurences"
-          style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}
-        />
-        <TextStats
-          show={showStat.text}
-          data={textStats}
-          style={{ height: '30vh', width: '50%', marginLeft: 'auto', marginRight: 'auto' }}
-        />
-        
         {isAnalysisReady &&
           <button
             style={{ marginTop: '1%', marginBottom: '1%' }}
