@@ -73,7 +73,7 @@ const Overlay = React.forwardRef(({ children, style, disableClose, disableX }, r
         overlayRef.current.focus()
         overlayRef.current.addEventListener('keyup', closeOnEscKey)
 
-        // dismount cleanup
+        // cleanup
         return () => {
             tempRef.removeEventListener('keyup', closeOnEscKey)
         }    
@@ -112,7 +112,7 @@ const Overlay = React.forwardRef(({ children, style, disableClose, disableX }, r
             href="#close"
             style={{ fontWeight: 800, fontSize: '150%', color: 'black', textDecoration: 'none' }}
           >
-            x
+            &times;
           </a>
         </button>
       }
