@@ -1,7 +1,7 @@
 # textstats
 A mini project to learn REST APIs and consume them via a React frontend.
 
-Live demo at https://textstats.herokuapp.com/app
+Live demo at https://textstats.onrender.com/
 ## backend
 Runs on Node.Js and uses Express.
 
