@@ -34,14 +34,22 @@ function App() {
   const canvasRef = React.createRef()
   const chartsOverlayRef = React.createRef()
   const progressOverlayRef = React.createRef()
+
+  const [appInitialized, setAppInitialized] = useState(false)
   
   useEffect(() => {
     textAnalysis.welcome().then(data => console.log(data))
     textAnalysis.getRoutes().then(data => {
       addConfigParam('routes', data)
+      setAppInitialized(true)
     })
-    setText(localStorage.getItem('textarea-text') || '')
   }, [])
+
+  useEffect(() => {
+    // display overlay while application is being initialized
+    setText(localStorage.getItem('textarea-text') || '')
+    progressOverlayRef.current[appInitialized ? 'hide' : 'show']()
+  }, [appInitialized])
 
   useEffect(() => {
     console.log('character stats', charStats)
@@ -149,7 +157,7 @@ function App() {
   
   return (
     <div className="App">
-      {/* text analysis progress overlay */}
+      {/* text analysis/app initialization progress overlay */}
       <Overlay
         ref={progressOverlayRef}
         style={{ backgroundColor: 'white', opacity: 0.9 }}
@@ -157,10 +165,9 @@ function App() {
         disableClose
       >
         <div style={{ width: '100%', height: '100%', textAlign: 'center' }}>
-          <h1 style={{ marginTop: '40vh' }}>Analyzing text</h1>
-          <div class="loader"></div>
+          <h1 style={{ marginTop: '40vh' }}>{appInitialized ? 'Analyzing text' : 'Initializing application'}</h1>
+          <div className="loader"></div>
         </div>
-        
       </Overlay>
       
       <h1 style={{marginBottom: 0, padding: 0}}>Text Statistics</h1>
